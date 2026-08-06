@@ -27,7 +27,7 @@ Las carpetas `data/` y `artifacts/` se crean durante la ejecución y no se versi
 Con el intérprete usado para este proyecto:
 
 ```powershell
--m pip install -r requirements.txt
+py -m pip install -r requirements.txt
 ```
 
 No se requieren OpenCV, TensorFlow ni dependencias de interfaces interactivas para ejecutar el análisis actual.
