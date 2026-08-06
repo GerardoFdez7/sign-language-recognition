@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Datos y artefactos generados
+data/raw/
+data/processed/
+data/manifests/*.csv
+artifacts/
+*.keras
+*.h5
+
+# Credenciales locales
+kaggle.json
+.env
