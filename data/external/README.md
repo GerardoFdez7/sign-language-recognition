@@ -9,4 +9,4 @@ data/external/<integrante>/
 └── E_01.jpg
 ```
 
-La etiqueta debe aparecer al inicio del nombre y separarse con `_`, `_` o un espacio. Tambien se acepta `del`, `nothing` y `space`.
+La etiqueta debe aparecer al inicio del nombre y separarse con `_`, `-` o un espacio. Tambien se acepta `del`, `nothing` y `space`.
