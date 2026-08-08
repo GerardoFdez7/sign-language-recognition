@@ -9,14 +9,14 @@ MODEL_PLAN = (
         "family": "convolutional",
         "input": "64x64x3",
         "purpose": "Línea base espacial de costo moderado",
-        "search": "filtros 32-64-128; dropout 0.25/0.40; lr 1e-3/3e-4",
+        "search": "filtros 16-32-64; dropout 0.30/0.40; lr 1e-3/3e-4",
     },
     {
         "name": "CNN con normalización",
         "family": "convolutional",
         "input": "64x64x3",
         "purpose": "Más profundidad, BatchNorm y regularización",
-        "search": "3/4 bloques; dropout 0.30/0.50; L2 0/1e-4",
+        "search": "bloques 12-24-48; dropout 0.35/0.50; lr 1e-3/5e-4",
     },
     {
         "name": "MLP",
@@ -30,7 +30,7 @@ MODEL_PLAN = (
         "family": "classical",
         "input": "descriptor HOG",
         "purpose": "Comparación basada en contornos y margen máximo",
-        "search": "kernel lineal/RBF; C 1/10; gamma scale/auto",
+        "search": "kernel lineal; C 0.1/1.0",
     },
 )
 

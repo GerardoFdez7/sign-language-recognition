@@ -3,6 +3,7 @@ __pycache__/
 .pytest_cache/
 .venv/
 venv/
+.vendor/
 
 # Datos y artefactos generados
 data/raw/
@@ -11,6 +12,8 @@ data/manifests/*.csv
 artifacts/
 *.keras
 *.h5
+*.joblib
+*.pt
 
 # Credenciales locales
 kaggle.json
