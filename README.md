@@ -1,58 +1,62 @@
 # SignBridge: reconocimiento de alfabeto ASL
-
-Proyecto Python para explorar el conjunto **ASL Alphabet**, preparar particiones reproducibles y definir los experimentos de clasificación de imágenes de manos.
+Proyecto Python para explorar el conjunto ASL Alphabet, preparar particiones reproducibles y definir los experimentos de clasificación de imágenes de manos.
 
 ## Estructura
 
 ```text
 sign-language-recognition/
-├── analisis_exploratorio.py   # Programa principal
-├── src/
-│   ├── config.py              # Parámetros reproducibles
-│   ├── data.py                # Descarga, inventario y particiones
-│   ├── eda.py                 # Gráficos y estadísticas visuales
-│   ├── preprocessing.py       # Carga y normalización con Pillow/NumPy
-│   └── model_catalog.py       # Modelos y transformaciones seleccionados
-├── tests/
-│   └── test_data_pipeline.py  # Prueba con imágenes sintéticas
-├── docs/
-│   └── informe.md             # Informe técnico
+├── analisis_exploratorio.py   # Inventario, gráficos y particiones
+├── entrenar_modelos.py        # CNN, MLP, SVM y transformaciones
+├── evaluar_fotos.py           # Pruebas oficiales y por integrante
+├── src/                       # Datos, preprocesamiento y modelos
+├── tests/                     # Pruebas automatizadas
+├── data/external/             # Fotografías aportadas por el equipo
+├── artifacts/                 # Métricas, figuras y pesos generados
 └── requirements.txt
 ```
 
-Las carpetas `data/` y `artifacts/` se crean durante la ejecución y no se versionan.
+`data/raw`, `data/processed` y `artifacts` se excluyen de Git por su tamaño.
 
 ## Instalación
-
-Con el intérprete usado para este proyecto:
 
 ```powershell
 py -m pip install -r requirements.txt
 ```
 
-No se requieren OpenCV, TensorFlow ni dependencias de interfaces interactivas para ejecutar el análisis actual.
+## 1. Análisis y particiones
 
-## Ejecución
-
-Si ASL Alphabet ya está descargado:
+Con los datos en `data/raw`:
 
 ```powershell
-py analisis_exploratorio.py --data-dir "C:\ruta\al\dataset"
+py analisis_exploratorio.py
 ```
 
-Para descargar la copia pública de Kaggle, que puede superar 1 GB:
+También puede indicarse `--data-dir "C:\ruta\al\dataset"` o solicitar la descarga con `--download`.
+
+## 2. Entrenamiento y comparación
 
 ```powershell
-py analisis_exploratorio.py --download
+py entrenar_modelos.py
 ```
 
-Sin argumentos, el programa busca datos en `data/raw` y en la caché local de Kaggle. Si todavía no existen, muestra las dos opciones anteriores y termina limpiamente.
+Se entrenan dos CNN con variaciones de hiperparámetros, dos MLP, SVM-HOG con dos valores de C y versiones con transformaciones. Los resultados existentes se reutilizan; `--force` obliga a repetirlos.
 
-Los resultados se guardan en:
+Resultados generados:
 
-- `data/manifests/`: asignación de entrenamiento, validación y prueba.
-- `artifacts/figures/`: distribución, ejemplos y comparaciones visuales.
-- `artifacts/tables/`: resúmenes, controles y catálogo de modelos.
+- `data/manifests/`: entrenamiento, validación y prueba.
+- `artifacts/models/`: estados de PyTorch y SVM.
+- `artifacts/metrics/`: historiales, predicciones y métricas.
+- `artifacts/figures/`: exploración, comparación y matrices de confusión.
+
+## 3. Fotografías externas
+
+Coloque al menos cinco letras distintas por persona en `data/external/<integrante>/`, con nombres como `A_01.jpg`, y ejecute:
+
+```powershell
+py evaluar_fotos.py
+```
+
+La etiqueta debe aparecer al inicio del nombre. Se aceptan A–Z, `del`, `nothing` y `space`.
 
 ## Pruebas
 
@@ -60,14 +64,15 @@ Los resultados se guardan en:
 py -m unittest discover -s tests -v
 ```
 
-La prueba crea temporalmente 290 imágenes sintéticas, comprueba sus cabeceras, genera las tres particiones y verifica que no compartan archivos.
+Las pruebas crean imágenes sintéticas, comprueban cabeceras y particiones, validan HOG y verifican las dimensiones de las tres arquitecturas neuronales.
 
-## Decisiones actuales
+## Configuración reproducible
 
 - Semilla global: `42`.
-- Submuestra: hasta `600` imágenes por clase.
-- Particiones estratificadas: 70 % entrenamiento, 15 % validación y 15 % prueba.
+- Submuestra: `600` imágenes por clase, 17 400 en total.
+- Particiones: 70 % entrenamiento, 15 % validación y 15 % prueba.
 - Entrada: RGB de `64 × 64`, tipo `float32`, valores en `[0, 1]`.
-- El pequeño directorio oficial de prueba queda fuera de la evaluación cuantitativa.
+- Selección: macro F1 de validación; la prueba se consulta después.
+- Mejor resultado actual: SVM-HOG con C=1, macro F1 de prueba `0.9443`.
 
-Fuente: [ASL Alphabet en Kaggle](https://www.kaggle.com/datasets/grassknoted/asl-alphabet)
+Fuente: [ASL Alphabet en Kaggle](https://www.kaggle.com/datasets/grassknoted/asl-alphabet).
